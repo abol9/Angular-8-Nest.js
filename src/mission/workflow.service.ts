@@ -23,6 +23,7 @@ export class WorkflowService {
         var workflow = await this.workflowRepository.findOne(workFlowUpdate.workflowID);
         if(workflow){
         workflow.title = workFlowUpdate.title;
+        workflow.missions = [];
         var res = await this.workflowRepository.save(workflow);
         return {
             state:true,
@@ -34,7 +35,7 @@ export class WorkflowService {
             }
     }
     }
-    async delete(id:number){
+    async deleteWork(id:number){
         const workflow = await this.workflowRepository.delete(id);
         return{
             state:true,
@@ -42,7 +43,7 @@ export class WorkflowService {
         } 
     }
     async findAll(){
-        var res = await this.workflowRepository.find();
+        var res = await this.workflowRepository.createQueryBuilder('workflow').leftJoinAndSelect('workflow.missions','missions').getMany();
         return {
             state:true,
             data:res

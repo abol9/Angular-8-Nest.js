@@ -44,7 +44,7 @@ export class MissionService {
             mission.title = updateMissionDto.title;
             mission.active = updateMissionDto.active;
             mission.description = updateMissionDto.description;
-            var workflow = await this.workflowRepository.findOne({workflowID : updateMissionDto.workflowID});
+            var workflow = await this.workflowRepository.createQueryBuilder('workflow').leftJoinAndSelect('workflow.missions','missions').where({workflowID:updateMissionDto.workflowID}).getOne();
             workflow.missions.push(mission)
             mission.workFlow = workflow;
             var res = this.missionRepository.save(mission);
